@@ -8,7 +8,6 @@ import UIKit
 import RealmSwift
 
 
-//CheckGIT
 
 class LoginVC: UIViewController {
     private var customerList: Results<Customer>?
