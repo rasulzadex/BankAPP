@@ -19,43 +19,44 @@ extension UITextField {
 }
 
 
-extension UITextField {
+extension String {
     func isValidEmail() -> Bool {
-        guard let email = self.text else { return false }
         let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
+        return emailPredicate.evaluate(with: self)
     }
     
     func isValidName() -> Bool {
-        guard let name = self.text else { return false }
         let nameRegex = "^[A-Za-z]{3,}$"
         let namePredicate = NSPredicate(format: "SELF MATCHES %@", nameRegex)
-        return namePredicate.evaluate(with: name)
+        return namePredicate.evaluate(with: self)
     }
     
     
     func isValidLastname() -> Bool {
-        guard let name = self.text else { return false }
         let nameRegex = "^[A-Za-z]{3,}$"
         let namePredicate = NSPredicate(format: "SELF MATCHES %@", nameRegex)
-        return namePredicate.evaluate(with: name)
+        return namePredicate.evaluate(with: self)
     }
     
     func isValidFinCode() -> Bool {
-           guard let finCode = self.text else { return false }
            let finCodeRegex = "^[A-Z0-9]{7}$"
            let finCodePredicate = NSPredicate(format: "SELF MATCHES %@", finCodeRegex)
-           return finCodePredicate.evaluate(with: finCode)
+           return finCodePredicate.evaluate(with: self)
        }
     
   
         func isValidPhoneNumber() -> Bool {
-            guard let phoneNumber = self.text else { return false }
             let phoneRegex = "^(99450|99451|99410|99455|99499|99470|99477)[0-9]{7}$"
             let phonePredicate = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
-            return phonePredicate.evaluate(with: phoneNumber)
+            return phonePredicate.evaluate(with: self)
         }
+    
+    func isValidPass() -> Bool {
+        let passwordRegex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+        let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
+                return passwordPredicate.evaluate(with: self) && self.count >= 8
+    }
 }
 
 

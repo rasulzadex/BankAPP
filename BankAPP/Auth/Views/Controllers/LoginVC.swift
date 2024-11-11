@@ -229,12 +229,9 @@ class LoginVC: UIViewController {
     
     @objc
         func registerButtonClick() {
-           let navController = RegisterVC()
+            let navController = RegisterVC(viewModel: RegisterViewModel())
             navigationController?.pushViewController(navController, animated: true)
             navigationController?.navigationBar.tintColor = .appGreen
-//            navigationController?.navigationBar.isHidden = false
-
-    
         }
     
     fileprivate func addSubviews(){

@@ -10,19 +10,6 @@ import RealmSwift
 
 class RegisterVC: UIViewController {
     
-    
-    private var customerList: Results<Customer>?
-    private let realm = try? Realm()
-    
-    private var emailCheck = false
-    private var numberCheck = false
-    private var finCheck = false
-    private var nameCheck = false
-    private var lastnameCheck = false
-    private var passwordCheck = false
-//    private var totalCheck = false
-    
-    
     private lazy var scrollView: UIScrollView = {
            let sv = UIScrollView()
            sv.translatesAutoresizingMaskIntoConstraints = false
@@ -382,6 +369,19 @@ class RegisterVC: UIViewController {
         
     }()
     
+    private let viewModel: RegisterViewModel
+    
+    init(viewModel: RegisterViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        self.viewModel = RegisterViewModel()
+        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     override func viewDidLoad() {
@@ -389,10 +389,10 @@ class RegisterVC: UIViewController {
         view.backgroundColor = .white
         let realm = try! Realm()
         print("Realm path", realm.configuration.fileURL!)
-        getCustomerList()
+        viewModel.fetchCustomerList()
+
         configureView()
         configureConstraints()
-        getDelegate()
 
     }
 
@@ -431,30 +431,6 @@ class RegisterVC: UIViewController {
 
            }
         
-    
-    
-    fileprivate func getDelegate(){
-       
-        
-        firstNameTF.delegate = self
-        lastNameTF.delegate = self
-        finCodeTF.delegate = self
-        phoneNumberTF.delegate = self
-        passwordTF.delegate = self
-        emailTF.delegate = self
-
-        
-    }
-  
-    
-    
-    
-    
-    fileprivate func getCustomerList(){
-        let results = realm?.objects(Customer.self)
-        customerList = results
-        
-    }
     fileprivate func configureConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -607,26 +583,22 @@ class RegisterVC: UIViewController {
     
     
     @objc func submitButton() {
-//            if totalCheck {
-        if phoneNumberTF.layer.borderColor == UIColor.green.cgColor && firstNameTF.layer.borderColor == UIColor.green.cgColor && lastNameTF.layer.borderColor == UIColor.green.cgColor && finCodeTF.layer.borderColor == UIColor.green.cgColor && emailTF.layer.borderColor == UIColor.green.cgColor && passwordTF.layer.borderColor == UIColor.green.cgColor {
+        if phoneNumberTF.layer.borderColor == UIColor.green.cgColor && firstNameTF.layer.borderColor == UIColor.green.cgColor && lastNameTF.layer.borderColor == UIColor.green.cgColor && finCodeTF.layer.borderColor == UIColor.green.cgColor && emailTF.layer.borderColor == UIColor.green.cgColor && passwordTF.layer.borderColor == UIColor.green.cgColor && viewModel.isAllValid {
+                        
+            
+            guard let name = firstNameTF.text,
+                  let lastname = lastNameTF.text,
+                  let fin = finCodeTF.text,
+                  let phone = phoneNumberTF.text,
+                  let email = emailTF.text,
+                  let pass = passwordTF.text else {return}
+            
+            viewModel.saveCustomer(name: name, lastName: lastname, customerID: fin, email: email, phoneNumber: phone, password: pass)
         
-                if numberCheck && nameCheck && lastnameCheck && finCheck && emailCheck && passwordCheck {
-                    
-                    data()
-                    navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
                 } else {
                     showAlert(on: self)
-                    
                 }
-                
-            }  else {
-                
-                showAlert(on: self)
-
-                
-       }
-           
-    
         }
     
     func showAlert(on viewController: UIViewController) {
@@ -644,123 +616,28 @@ class RegisterVC: UIViewController {
     
     
     @objc func loginButtonClick() {
-//           let navController = LoginVC()
             navigationController?.popViewController(animated: true)
     
         }
-        
-        private func data(){
-         
-                let customer = Customer()
-                guard let name = firstNameTF.text,
-                      let lastname = lastNameTF.text,
-                      let fincode = finCodeTF.text,
-                      let phonenumber = phoneNumberTF.text,
-                      let email = emailTF.text,
-                        let password = passwordTF.text
-            else {return}
-            
-            customer.name = name
-            customer.lastName = lastname
-            customer.customerID = fincode
-            customer.emailAddress = email
-            customer.customerPassword = password
-            customer.phoneNumber = phonenumber
-
-
-            
-            try! realm?.write({
-                realm?.add(customer)
-            })
-        }
     
     
 }
 
-extension RegisterVC: UITextFieldDelegate {
-    
+ extension RegisterVC: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let text = textField.text else {return}
-        
-        if let emailtext = emailTF.text {
-            if !emailtext.isEmpty {
-                if !emailTF.isValidEmail() {
-                    emailTF.layer.borderColor = UIColor.red.cgColor
-                }else{
-                    emailTF.layer.borderColor = UIColor.green.cgColor
-                    emailCheck = true
-                }
-            }
+        if textField == emailTF {
+            emailTF.layer.borderColor = viewModel.validateEmail(emailTF.text ?? "") ? UIColor.green.cgColor : UIColor.red.cgColor
+        } else if textField == firstNameTF {
+            firstNameTF.layer.borderColor = viewModel.validateName(firstNameTF.text ?? "") ? UIColor.green.cgColor : UIColor.red.cgColor
+        } else if textField == lastNameTF {
+            lastNameTF.layer.borderColor = viewModel.validateLastname(lastNameTF.text ?? "") ? UIColor.green.cgColor : UIColor.red.cgColor
+        } else if textField == passwordTF {
+            passwordTF.layer.borderColor = viewModel.validatePassword(passwordTF.text ?? "") ? UIColor.green.cgColor : UIColor.red.cgColor
+        } else if textField == finCodeTF {
+            finCodeTF.layer.borderColor = viewModel.validateFIN(finCodeTF.text ?? "") ? UIColor.green.cgColor : UIColor.red.cgColor
+        } else if textField == phoneNumberTF {
+            phoneNumberTF.layer.borderColor = viewModel.validatePhone(phoneNumberTF.text ?? "") ? UIColor.green.cgColor : UIColor.red.cgColor
         }
-        
-        if let nametext = firstNameTF.text{
-            if !nametext.isEmpty {
-                if !firstNameTF.isValidName(){
-                    firstNameTF.layer.borderColor = UIColor.red.cgColor
-                }else{
-                    firstNameTF.layer.borderColor = UIColor.green.cgColor
-                    nameCheck = true
-                }
-                
-            }
-        }
-        
-        if let lastnametext = lastNameTF.text{
-            if !lastnametext.isEmpty {
-                if !firstNameTF.isValidLastname(){
-                    lastNameTF.layer.borderColor = UIColor.red.cgColor
-                }else{
-                    lastNameTF.layer.borderColor = UIColor.green.cgColor
-                    lastnameCheck = true
-                }
-                
-            }
-            
-            
-        }
-        if let passwordtext = passwordTF.text {
-            if !passwordtext.isEmpty{
-                if passwordtext.count < 8 {
-                    passwordTF.layer.borderColor = UIColor.red.cgColor
-                }else{
-                    passwordTF.layer.borderColor = UIColor.green.cgColor
-                    passwordCheck = true
-                }
-            }
-            
-        }
-        
-        if let fintext = finCodeTF.text {
-            if !fintext.isEmpty{
-                if !finCodeTF.isValidFinCode(){
-                    finCodeTF.layer.borderColor = UIColor.red.cgColor
-                }else{
-                    finCodeTF.layer.borderColor = UIColor.green.cgColor
-                    finCheck = true
-                
-                }
-                
-            }
-            
-            
-        }
-        
-        if let numbertext = phoneNumberTF.text{
-            if !numbertext.isEmpty{
-                if !phoneNumberTF.isValidPhoneNumber(){
-                    phoneNumberTF.layer.borderColor = UIColor.red.cgColor
-                }else{
-                    phoneNumberTF.layer.borderColor = UIColor.green.cgColor
-                    numberCheck = true
-                }
-            }
-            
-        }
-//        if phoneNumberTF.layer.borderColor == UIColor.green.cgColor && firstNameTF.layer.borderColor == UIColor.green.cgColor && lastNameTF.layer.borderColor == UIColor.green.cgColor && finCodeTF.layer.borderColor == UIColor.green.cgColor && emailTF.layer.borderColor == UIColor.green.cgColor && passwordTF.layer.borderColor == UIColor.green.cgColor{
-//        }
-
-    
-        
-        
     }
 }
+

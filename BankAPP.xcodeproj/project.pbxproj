@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A0B926C2CE24E1F00F2A476 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0B926B2CE24E1F00F2A476 /* RegisterViewModel.swift */; };
 		2A25093C2CD8BC64003740F0 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2A25093B2CD8BC64003740F0 /* RealmSwift */; };
 		2A25093E2CD8C27D003740F0 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A25093D2CD8C27D003740F0 /* Customer.swift */; };
 		2A2509402CDA3367003740F0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A25093F2CDA3367003740F0 /* Extensions.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A0B926B2CE24E1F00F2A476 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		2A25093D2CD8C27D003740F0 /* Customer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Customer.swift; sourceTree = "<group>"; };
 		2A25093F2CDA3367003740F0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2A2509412CDA3523003740F0 /* GetStartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartVC.swift; sourceTree = "<group>"; };
@@ -51,6 +53,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A0B92692CE24DD800F2A476 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2A2509452CDA35D3003740F0 /* Controllers */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2A0B926A2CE24E0700F2A476 /* ViewModules */ = {
+			isa = PBXGroup;
+			children = (
+				2A0B926B2CE24E1F00F2A476 /* RegisterViewModel.swift */,
+			);
+			path = ViewModules;
+			sourceTree = "<group>";
+		};
 		2A2509432CDA35B0003740F0 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -63,8 +81,9 @@
 		2A2509442CDA35C1003740F0 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				2A0B92692CE24DD800F2A476 /* Views */,
+				2A0B926A2CE24E0700F2A476 /* ViewModules */,
 				2A2509522CDB8FF2003740F0 /* Models */,
-				2A2509452CDA35D3003740F0 /* Controllers */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -237,6 +256,7 @@
 				2AC59B762CD627D600DBAA9F /* AppDelegate.swift in Sources */,
 				2AC59B782CD627D600DBAA9F /* SceneDelegate.swift in Sources */,
 				2A25093E2CD8C27D003740F0 /* Customer.swift in Sources */,
+				2A0B926C2CE24E1F00F2A476 /* RegisterViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
