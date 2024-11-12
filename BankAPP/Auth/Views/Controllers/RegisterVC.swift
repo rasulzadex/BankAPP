@@ -327,9 +327,15 @@ class RegisterVC: UIViewController {
     }()
 
     @objc private func passwordVisibility() {
-        passwordTF.isSecureTextEntry.toggle()
-        
-        closedEyeImage.image = passwordTF.isSecureTextEntry ? UIImage(named: "eyeClosed") : UIImage(named: "eyeOpen")
+        if passwordTF.isSecureTextEntry == true {
+            closedEyeImage.image = UIImage(named: "eyeOpen")
+            passwordTF.isSecureTextEntry = false
+            
+        }else{
+            closedEyeImage.image = UIImage(named: "eyeClosed")
+            passwordTF.isSecureTextEntry = true
+            
+        }
     }
 
     
@@ -389,7 +395,7 @@ class RegisterVC: UIViewController {
         view.backgroundColor = .white
         let realm = try! Realm()
         print("Realm path", realm.configuration.fileURL!)
-        viewModel.fetchCustomerList()
+             viewModel.fetchCustomerList()
 
         configureView()
         configureConstraints()

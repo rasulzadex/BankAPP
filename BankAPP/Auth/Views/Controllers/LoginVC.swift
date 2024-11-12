@@ -83,9 +83,15 @@ class LoginVC: UIViewController {
     }()
 
     @objc private func passwordVisibility() {
-        passwordTextF.isSecureTextEntry.toggle()
-        
-        closedEyeImage.image = passwordTextF.isSecureTextEntry ? UIImage(named: "eyeClosed") : UIImage(named: "eyeOpen")
+        if passwordTextF.isSecureTextEntry == true {
+            closedEyeImage.image = UIImage(named: "eyeOpen")
+            passwordTextF.isSecureTextEntry = false
+            
+        }else{
+            closedEyeImage.image = UIImage(named: "eyeClosed")
+            passwordTextF.isSecureTextEntry = true
+            
+        }
     }
 
     
@@ -199,7 +205,7 @@ class LoginVC: UIViewController {
     
     @objc
     func loginButtonClick() {
-         guard let customers = fetchCustomers() else { // Added optional check to handle nil response
+         guard let customers = fetchCustomers() else { 
              showAlert(on: self, message: "Failed to fetch customers.")
              return
          }
@@ -207,7 +213,6 @@ class LoginVC: UIViewController {
          for customer in customers {
              if phoneNumberTextF.text == customer.phoneNumber,
                 passwordTextF.text == customer.customerPassword {
-                 // Navigate to TestVC if login is successful
                  let navController = TestVC()
                  navigationController?.pushViewController(navController, animated: true)
                  navigationController?.navigationBar.tintColor = .appGreen
@@ -215,7 +220,6 @@ class LoginVC: UIViewController {
              }
          }
          
-         // Show alert if login fails
          showAlert(on: self, message: "Please check your inputs and try again.")
      }
      
